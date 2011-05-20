@@ -1,0 +1,10 @@
+
+<div class='admin_content'> 
+<% active_table_for :user_review_types_table, @tbl do |t| %>
+  <% active_tr 'user_review', t.id do |tr| %>
+    <td><%= tr.checkbox %></td>
+    <td><%= link_to h(t.name), :action => 'edit', :path => [ t.id ] %></td>
+  <% end -%>
+<% end -%>
+
+</div>

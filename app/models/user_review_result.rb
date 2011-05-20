@@ -1,0 +1,6 @@
+
+
+
+class UserReviewResult < DomainModel
+
+end
