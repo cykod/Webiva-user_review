@@ -4,10 +4,27 @@ class UserReview::PageFeature < ParagraphFeature
   include PageHelper
 
   feature :user_review_page_list, :default_feature => <<-FEATURE
+  <ol>
+  <cms:review>
+  <li>
+      <h2><cms:detail_link><cms:title/></cms:detail_link></h2>
+      <cms:rating/>
+      <cms:submitted_by/>
+      <cms:review_body/>
+      <cms:submitted_at/>
+      <cms:publication>
+         
+      </cms:publication>
+  </li>
+  </cms:review>
+  </ol>
     FEATURE
 
   def user_review_page_list_feature(data)
     webiva_feature(:user_review_page_list,data) do |c|
+      c.loop_tag('review') { |t| data[:reviews] }
+      c.link_tag('review:detail') { |t| data[:options].detail_page_node.link(data[:content_path],t.locals.review.permalink) if data[:options].detail_page_node }
+      add_review_tags(c,data)
     end
   end
 
@@ -49,13 +66,43 @@ class UserReview::PageFeature < ParagraphFeature
   end
 
   feature :user_review_page_detail, :default_feature => <<-FEATURE
-    Detail Feature Code...
+  <cms:review>
+      <h1><cms:title/></h1>
+      <cms:rating/>
+      <cms:submitted_by/>
+      <cms:review_body/>
+      <cms:submitted_at/>
+      <cms:publication>
+         
+      </cms:publication>
+  </cms:review>
+  <cms:return_link>Back to List</cms:return_link>
   FEATURE
 
   def user_review_page_detail_feature(data)
     webiva_feature(:user_review_page_detail,data) do |c|
-      # c.define_tag ...
+      c.expansion_tag('review') { |t| t.locals.review = data[:review] }
+      add_review_tags(c,data)
+      c.link_tag('return') { |t| data[:options].list_page_node.link(data[:content_path]) if data[:options].list_page_node }
     end
+  end
+  
+  def add_review_tags(c,data)
+    c.attribute_tags('review',[ 'title','permalink' ]) { |t| t.locals.review }
+
+    c.datetime_tag('review:submitted_at') { |t| t.locals.review.created_at }
+    c.h_tag('review:review_body','value',:format => :simple) { |t| t.locals.review.review_body }
+
+    c.value_tag('review:rating') { |t| t.locals.review.rating * (t.attr['multiplier'] || 1).to_i }
+
+    c.h_tag('review:submitted_by') { |t| t.locals.end_user.username if t.locals.end_user }
+
+    c.expansion_tag('review:publication') { |t| t.locals.entry = t.locals.review.model }
+
+    if data[:options].user_review_type && cm = data[:options].user_review_type.content_model
+      c.define_content_model_value_tags('review:publication',cm)
+    end
+
   end
 
 end

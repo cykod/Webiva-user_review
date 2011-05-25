@@ -2,19 +2,34 @@ class UserReview::PageController < ParagraphController
 
   editor_header 'User Review Paragraphs'
   
-  editor_for :list, :name => "List User Review", :feature => :user_review_page_list, :inputs => [[ :content_node_id, 'Content Node', :content_node_id ]]
+  editor_for :list, :name => "List User Review", :feature => :user_review_page_list, :inputs => { :input =>  [[ :content_node_id, 'Content Node', :content_node_id ]], :path =>  [[ :permalink, 'Permalink', :path ]], :content_path => [[ :permalink, "Content Path", :path ]] }
   editor_for :submit, :name => "Submit User Review", :feature => :user_review_page_submit, :inputs => [[ :content_node_id, 'Content Node', :content_node_id ]]
 
-  editor_for :detail, :name => "User Review Detail", :feature => :user_review_page_detail, :inputs => [[ :content_node_id, 'Content Node', :content_node_id ]]
+  editor_for :detail, :name => "User Review Detail", :feature => :user_review_page_detail, :inputs => { :input => [[ :permalink, 'Permalink', :path ]],  :content_path => [[ :permalink, "Content Path", :path ]] }
+
 
 
   class ListOptions < HashModel
     # Paragraph Options
     # attributes :success_page_id => nil
+    attributes :detail_page_id => nil, :user_review_type_id => nil
+
+    page_options :detail_page_id
 
     options_form(
-                 # fld(:success_page_id, :page_selector) # <attribute>, <form element>, <options>
+                fld(:user_review_type_id, :select, :options => Proc.new { UserReviewType.select_options_with_nil } ),
+                fld(:detail_page_id, :page_selector)
                  )
+
+    def user_review_type
+      if self.user_review_type_id
+        @user_review_type ||= UserReviewType.find_by_id(self.user_review_type_id)
+      else
+        nil
+      end
+    end
+    
+
   end
 
   class SubmitOptions < HashModel
@@ -58,12 +73,24 @@ class UserReview::PageController < ParagraphController
   end
 
   class DetailOptions < HashModel
-    # Paragraph Options
-    # attributes :success_page_id => nil
+    attributes :user_review_type_id => nil, :list_page_id => nil
+
+    page_options :list_page_id
 
     options_form(
-                 # fld(:success_page_id, :page_selector) # <attribute>, <form element>, <options>
+                fld(:user_review_type_id, :select, :options => Proc.new { UserReviewType.select_options_with_nil } ), 
+                fld(:list_page_id, :page_selector)
+
                  )
+
+    def user_review_type
+      if self.user_review_type_id
+        @user_review_type ||= UserReviewType.find_by_id(self.user_review_type_id)
+      else
+        nil
+      end
+    end
+
   end
 
 end
