@@ -27,6 +27,7 @@ class InitialTables < ActiveRecord::Migration
       t.string :content_node_id
       t.integer :rating
       t.timestamps
+      t.integer :approval, :default => 0
     end
 
     add_index :user_review_reviews, :end_user_id, :name => 'Users Reviews'
