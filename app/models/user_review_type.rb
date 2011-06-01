@@ -15,6 +15,11 @@ class UserReviewType < DomainModel
     "User Review Type"
   end
 
+
+  def content_admin_url(node)
+    { :controller => "/user_review/manage",:action => 'edit', :path => [ node  ] }
+  end
+
   def validate
     if self.content_model
 

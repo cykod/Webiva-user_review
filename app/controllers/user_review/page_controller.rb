@@ -12,13 +12,15 @@ class UserReview::PageController < ParagraphController
   class ListOptions < HashModel
     # Paragraph Options
     # attributes :success_page_id => nil
-    attributes :detail_page_id => nil, :user_review_type_id => nil
+    attributes :detail_page_id => nil, :user_review_type_id => nil, :per_page => 10
 
     page_options :detail_page_id
+    integer_options :per_page
 
     options_form(
                 fld(:user_review_type_id, :select, :options => Proc.new { UserReviewType.select_options_with_nil } ),
-                fld(:detail_page_id, :page_selector)
+                fld(:detail_page_id, :page_selector),
+                fld(:text_field, :per_page)
                  )
 
     def user_review_type

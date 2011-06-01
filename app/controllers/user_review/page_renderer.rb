@@ -12,7 +12,7 @@ class UserReview::PageRenderer < ParagraphRenderer
     # Any instance variables will be sent in the data hash to the 
     # user_review_page_list_feature automatically
     #
-    conn_type,@content_path = page_connection(:content_path)
+    path_conn_type,@content_path = page_connection(:content_path)
 
     conn_type,conn_review = page_connection(:path)
     return render_paragraph :text => '' if !conn_review.blank?
@@ -21,8 +21,9 @@ class UserReview::PageRenderer < ParagraphRenderer
       @pages,@reviews = UserReviewReview.paginate(params[:page])
     else
       conn_type,conn_id = page_connection
-      return render_paragraph :text => '' if conn_id.blank?
-      @pages,@reviews = UserReviewReview.by_container_node(conn_id).approved.paginate(params[:page],{ :order => 'created_at DESC'})
+      return render_paragraph :text => '' if conn_id.blank? && conn_type.present?
+      scope = path_conn_type ? UserReviewReview.by_container_node(conn_id) : UserReviewReview
+      @pages,@reviews = scope.approved.paginate(params[:page], :order => 'created_at DESC', :per_page => @options.per_page)
     end
 
   
@@ -37,6 +38,14 @@ class UserReview::PageRenderer < ParagraphRenderer
       if @review
         @review.update_attributes(:end_user_id => myself.id)
         session[:user_review_submitted] = nil
+
+        entry = UserProfileEntry.fetch_first_entry(myself)
+        if entry && entry.content_model_entry
+          entry.content_model_entry.attributes = @review.model.match_models(entry.content_model_entry)
+          entry.content_model_entry.save
+        end
+
+
         return redirect_paragraph @options.success_page_url
       end
     end
@@ -69,6 +78,11 @@ class UserReview::PageRenderer < ParagraphRenderer
         end
         
 
+      end
+    elsif myself.id
+      entry = UserProfileEntry.fetch_first_entry(myself)
+      if entry && entry.content_model_entry
+        @review.model.attributes = entry.content_model_entry.match_models(@review.model)
       end
     end
   

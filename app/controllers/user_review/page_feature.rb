@@ -23,7 +23,14 @@ class UserReview::PageFeature < ParagraphFeature
   def user_review_page_list_feature(data)
     webiva_feature(:user_review_page_list,data) do |c|
       c.loop_tag('review') { |t| data[:reviews] }
-      c.link_tag('review:detail') { |t| data[:options].detail_page_node.link(data[:content_path],t.locals.review.permalink) if data[:options].detail_page_node }
+      c.link_tag('review:detail') do |t| 
+        if data[:options].detail_page_node 
+          data[:options].detail_page_node.link(data[:content_path],t.locals.review.permalink) 
+        else
+          t.locals.review.content_node.link
+        end
+      end
+      c.pagelist_tag('pages') { |t| data[:pages] }
       add_review_tags(c,data)
     end
   end

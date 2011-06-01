@@ -9,6 +9,7 @@ class UserReviewReview < DomainModel
   belongs_to :user_review_type
 
   after_save :save_content_model
+  after_save :save_user_review_result
   before_create :generate_permalink
 
   belongs_to :container_node, :class_name => 'ContentNode'
@@ -24,6 +25,10 @@ class UserReviewReview < DomainModel
     if @content_model_entry
       self.errors.add_to_base('Model error') if !@content_model_entry.valid?  
     end
+  end
+
+  def content_description(language)
+    "User Review"
   end
 
   def content_model
@@ -62,6 +67,10 @@ class UserReviewReview < DomainModel
       @content_model_entry.attributes =  { self.user_review_type.relation_field => self.id }
       @content_model_entry.save
     end
+  end
+
+  def save_user_review_result
+    UserReviewResult.push_review(self)
   end
 
   def generate_permalink
