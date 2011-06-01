@@ -60,7 +60,6 @@ class UserReview::PageFeature < ParagraphFeature
       else
         c.expansion_tag('review:publication') { |t| false }
       end
-
       c.submit_tag('review:submit')
     end
   end

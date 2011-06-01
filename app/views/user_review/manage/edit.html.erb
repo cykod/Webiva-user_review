@@ -1,0 +1,19 @@
+<div class='admin_content'>
+  <% admin_form_for :user_review, @review do |f| %>
+    <%= f.text_field :title,:size => 80 %>
+    <%= f.radio_buttons :approval, UserReviewReview.approval_select_options %>
+    <%= f.text_field :permalink, :size => 80 %>
+    <%= f.text_area :review_body, :rows => 12, :cols => 80 %>
+    <%= f.end_user_selector :end_user_id, :no_name => true %>
+    <%= f.rating_field :rating %>
+
+    <% cms_subfields_for 'user_review[model_data]', @review.model do |sf| %>
+      <%= @review.user_review_type.content_model.edit_form(sf,:except =>  @review.user_review_type.content_model_field_id) %>
+
+    <% end -%>
+
+    <%= f.cancel_submit_buttons %>
+  <% end -%>
+
+
+</div>

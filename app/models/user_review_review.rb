@@ -5,6 +5,7 @@ class UserReviewReview < DomainModel
   validates_presence_of :title, :review_body
 
 
+  belongs_to :end_user
   belongs_to :user_review_type
 
   after_save :save_content_model
@@ -12,8 +13,9 @@ class UserReviewReview < DomainModel
 
   belongs_to :container_node, :class_name => 'ContentNode'
 
-  content_node :container_type => 'UserReviewType',  :container_field => :user_review_type_id, :push_value => true, :published_at => :published_at, :published => Proc.new { |o| o.approval > 0 }
+  content_node :container_type => 'UserReviewType',  :container_field => :user_review_type_id, :push_value => true,  :published => Proc.new { |o| o.approval > 0 }
 
+  has_options :approval, [['Rejected',-1],['Unmoderated',0],['Approved',1]]
 
   named_scope :by_container_node, Proc.new { |node_id| { :conditions => { :container_node_id => node_id } } }
   named_scope :approved, { :conditions => [ 'approval > 0' ] }
@@ -30,6 +32,13 @@ class UserReviewReview < DomainModel
 
   def model_data=(val)
     self.model.attributes = val
+  end
+
+  def self.content_node_select_options
+    reviews = UserReviewReview.find(:all,:select => 'container_node_id',:group => 'container_node_id')
+
+
+    ContentNodeValue.select_options(:conditions => { :content_node_id => reviews.map(&:container_node_id) })
   end
 
  def model
@@ -61,6 +70,17 @@ class UserReviewReview < DomainModel
   
   def publish!
     self.update_attributes(:approval => 1)
+  end
+
+  def rating_icon(override=nil)
+    override = approval unless override
+    if override == 0
+      'icons/table_actions/rating_none.gif'
+    elsif override > 0
+      'icons/table_actions/rating_positive.gif'
+    else 
+      'icons/table_actions/rating_negative.gif'
+    end
   end
 
 end

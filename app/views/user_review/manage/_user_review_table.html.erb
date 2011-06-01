@@ -1,0 +1,13 @@
+
+<% active_table_for :user_review_table, @tbl,
+  :actions => [[ 'Approve', 'approve']],
+  :more_actions => [['Delete','delete','Are you sure you want to delete the selected reviews?']] do |t| %>
+    <% active_tr 'user_review', t.id do |tr| %>
+      <td><%= tr.checkbox -%></td>
+      <td><%= link_to h(truncate(t.title)), :action => 'edit', :path => [ t.id ] %></td>
+      <td><%= link_to(h(truncate(t.container_node.title)), t.container_node.link) if t.container_node %></td>
+      <td valign='baseline' align='center'><img src='<%= theme_src(t.rating_icon) %>'/></td>
+      <td><%= h(t.end_user ? t.end_user.full_name : "(No User)") %></td>
+      <td><%= t.rating %></td>
+    <% end -%>
+<% end -%>
