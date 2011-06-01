@@ -10,8 +10,13 @@ class UserReviewReview < DomainModel
   after_save :save_content_model
   before_create :generate_permalink
 
-  named_scope :by_content_node, Proc.new { |node_id| { :conditions => { :content_node_id => node_id } } }
+  belongs_to :container_node, :class_name => 'ContentNode'
 
+  content_node :container_type => 'UserReviewType',  :container_field => :user_review_type_id, :push_value => true, :published_at => :published_at, :published => Proc.new { |o| o.approval > 0 }
+
+
+  named_scope :by_container_node, Proc.new { |node_id| { :conditions => { :container_node_id => node_id } } }
+  named_scope :approved, { :conditions => [ 'approval > 0' ] }
 
   def validate
     if @content_model_entry
@@ -52,6 +57,10 @@ class UserReviewReview < DomainModel
 
   def generate_permalink
      self.permalink = generate_url(:permalink,self.title.to_s.strip)
+  end
+  
+  def publish!
+    self.update_attributes(:approval => 1)
   end
 
 end

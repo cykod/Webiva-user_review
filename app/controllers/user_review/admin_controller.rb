@@ -17,7 +17,15 @@ class UserReview::AdminController < ModuleController
 
   permit 'user_review_config'
 
+  content_model :user_review_review
+
+
   public 
+
+  def self.get_user_review_review_info
+    [{ :name => 'User Reviews', :url => { :controller => '/user_review/manage', :action => 'index' }, :permission => :user_review_manage }
+     ]
+  end
 
 
   active_table :user_review_types_table, UserReviewType, [

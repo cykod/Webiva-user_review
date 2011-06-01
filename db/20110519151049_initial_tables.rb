@@ -12,7 +12,7 @@ class InitialTables < ActiveRecord::Migration
 
     create_table :user_review_results do |t|
       t.integer :user_review_type_id
-      t.integer :content_node_id
+      t.integer :container_node_id
       t.integer :num_ratings
       t.integer :rating_stars
       t.decimal :rating, :precision=> 14, :scale => 2
@@ -24,14 +24,14 @@ class InitialTables < ActiveRecord::Migration
       t.string :title
       t.string :permalink
       t.text :review_body
-      t.string :content_node_id
+      t.integer :container_node_id
       t.integer :rating
       t.timestamps
       t.integer :approval, :default => 0
     end
 
     add_index :user_review_reviews, :end_user_id, :name => 'Users Reviews'
-    add_index :user_review_reviews, :content_node_id, :name => 'Content Index'
+    add_index :user_review_reviews, :container_node_id, :name => 'Content Index'
   end
 
   def self.down

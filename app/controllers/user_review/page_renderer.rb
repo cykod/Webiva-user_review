@@ -22,7 +22,7 @@ class UserReview::PageRenderer < ParagraphRenderer
     else
       conn_type,conn_id = page_connection
       return render_paragraph :text => '' if conn_id.blank?
-      @pages,@reviews = UserReviewReview.paginate(params[:page],{ :order => 'created_at DESC'},UserReviewReview.by_content_node(conn_id))
+      @pages,@reviews = UserReviewReview.by_container_node(conn_id).approved.paginate(params[:page],{ :order => 'created_at DESC'})
     end
 
   
@@ -52,7 +52,7 @@ class UserReview::PageRenderer < ParagraphRenderer
    
     @review = UserReviewReview.new({ :end_user_id => myself.id, 
                                      :user_review_type_id => @options.user_review_type_id,
-                                     :content_node_id => node.id })
+                                     :container_node_id => node.id })
     require_js('prototype')
 
     if request.post? && params[:review]

@@ -9,6 +9,9 @@ class UserReviewType < DomainModel
   validates_presence_of :name
 
 
+  content_node_type :user_review, "UserReviewReview", :content_name => :name,:title_field => :title, :url_field => :permalink, :except => Proc.new { |blg| blg.is_user_blog? }
+ 
+
   def validate
     if self.content_model
 
@@ -21,6 +24,12 @@ class UserReviewType < DomainModel
       end
     end
   end
+
+  def content_detail_link_url(path,obj)
+    obj.content_node
+  end
+
+
 
 
 end
