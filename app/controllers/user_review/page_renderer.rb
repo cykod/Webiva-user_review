@@ -18,7 +18,7 @@ class UserReview::PageRenderer < ParagraphRenderer
     return render_paragraph :text => '' if !conn_review.blank?
 
     if editor?
-      @pages,@reviews = UserReviewReview.paginate(params[:page])
+      @pages,@reviews = UserReviewReview.paginate(params[:page], :per_page => @options.per_page)
     else
       conn_type,conn_id = page_connection
       return render_paragraph :text => '' if conn_id.blank? && conn_type.present?

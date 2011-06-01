@@ -20,7 +20,7 @@ class UserReview::PageController < ParagraphController
     options_form(
                 fld(:user_review_type_id, :select, :options => Proc.new { UserReviewType.select_options_with_nil } ),
                 fld(:detail_page_id, :page_selector),
-                fld(:text_field, :per_page)
+                fld(:per_page, :text_field)
                  )
 
     def user_review_type
