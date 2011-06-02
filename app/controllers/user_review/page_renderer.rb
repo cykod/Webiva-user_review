@@ -98,6 +98,12 @@ class UserReview::PageRenderer < ParagraphRenderer
     if !editor?
       conn_type,conn_id = page_connection
       @review = UserReviewReview.find_by_permalink(conn_id)
+
+      raise SiteNodeEngine::MissingPageException.new( site_node, language ) if !@review && conn_id.present?
+
+      if @review && @review.container_node
+        set_title(@review.container_node.title.to_s + " - " + @review.title.to_s)
+      end
     else
       @review = UserReviewReview.first
     end
