@@ -32,8 +32,8 @@ class UserReview::ManageController < ModuleController
 
 
   def display_user_review_table(display=true)
-    active_table_action 'review' do |act,ids|
-      case 'act'
+    active_table_action 'user_review' do |act,ids|
+      case act
       when 'delete':
         UserReviewReview.destroy ids
       when 'approve'

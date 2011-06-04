@@ -12,6 +12,8 @@ class UserReviewReview < DomainModel
   after_save :save_user_review_result
   before_create :generate_permalink
 
+  before_destroy :destroy_model
+
   belongs_to :container_node, :class_name => 'ContentNode'
 
   content_node :container_type => 'UserReviewType',  :container_field => :user_review_type_id, :push_value => true,  :published => Proc.new { |o| o.approval > 0 }
@@ -79,6 +81,10 @@ class UserReviewReview < DomainModel
   
   def publish!
     self.update_attributes(:approval => 1)
+  end
+
+  def destroy_model
+    self.model.destroy if self.model.id
   end
 
   def rating_icon(override=nil)

@@ -7,7 +7,7 @@
       <td><%= link_to h(truncate(t.title)), :action => 'edit', :path => [ t.id ] %></td>
       <td><%= link_to(h(truncate(t.container_node.title)), t.container_node.link) if t.container_node %></td>
       <td valign='baseline' align='center'><img src='<%= theme_src(t.rating_icon) %>'/></td>
-      <td><%= h(t.end_user ? t.end_user.email : "(No User)") %></td>
+      <td><%= t.end_user ? link_to(h(t.end_user.email), :controller => '/members',:action => 'view', :path => [ t.end_user_id ]) : "(No User)" %></td>
       <td><%= t.rating %></td>
     <% end -%>
 <% end -%>

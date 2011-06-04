@@ -101,7 +101,7 @@ class UserReview::PageFeature < ParagraphFeature
 
     c.value_tag('review:rating') { |t| t.locals.review.rating * (t.attr['multiplier'] || 1).to_i }
 
-    c.h_tag('review:submitted_by') { |t| t.locals.end_user.username if t.locals.end_user }
+    c.h_tag('review:submitted_by') { |t| t.locals.review.end_user.username if t.locals.review.end_user }
 
     c.expansion_tag('review:publication') { |t| t.locals.entry = t.locals.review.model }
 
