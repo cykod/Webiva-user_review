@@ -3,7 +3,7 @@ class UserReview::PageController < ParagraphController
   editor_header 'User Review Paragraphs'
   
   editor_for :list, :name => "List User Review", :feature => :user_review_page_list, :inputs => { :input =>  [[ :content_node_id, 'Content Node', :content_node_id ]], :path =>  [[ :permalink, 'Permalink', :path ]], :content_path => [[ :permalink, "Content Path", :path ]] }
-  editor_for :submit, :name => "Submit User Review", :feature => :user_review_page_submit, :inputs => [[ :content_node_id, 'Content Node', :content_node_id ]]
+  editor_for :submit, :name => "Submit User Review", :feature => :user_review_page_submit, :inputs => [[ :content_node_id, 'Content Node', :content_node_id ]], :triggers => [['New Review Submitted','action']]
 
   editor_for :detail, :name => "User Review Detail", :feature => :user_review_page_detail, :inputs => { :input => [[ :permalink, 'Permalink', :path ]],  :content_path => [[ :permalink, "Content Path", :path ]] }
 
@@ -72,6 +72,11 @@ class UserReview::PageController < ParagraphController
       end
 
     end
+
+    def options_partial
+      "/application/triggered_options_partial"
+    end
+
   end
 
   class DetailOptions < HashModel
