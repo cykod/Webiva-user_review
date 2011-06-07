@@ -45,7 +45,6 @@ class UserReview::PageRenderer < ParagraphRenderer
           entry.content_model_entry.save
         end
 
-
         return redirect_paragraph @options.success_page_url
       end
     end
@@ -66,6 +65,8 @@ class UserReview::PageRenderer < ParagraphRenderer
 
     if request.post? && params[:review]
       if @review.update_attributes(params[:review].slice(:title,:review_body,:rating,:model_data,:container_node_id))
+        run_triggered_actions('action', @review, myself)
+        
         if !myself.id
         # if we're not logged in, redirect to user login page, set session and review
           session[:user_review_submitted] = @review.id
@@ -81,7 +82,7 @@ class UserReview::PageRenderer < ParagraphRenderer
       end
     elsif myself.id
       entry = UserProfileEntry.fetch_first_entry(myself)
-      if entry && entry.content_model_entry
+      if entry && entry.content_model_entry && @review.model
         @review.model.attributes = entry.content_model_entry.match_models(@review.model)
       end
     end

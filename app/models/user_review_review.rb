@@ -34,7 +34,7 @@ class UserReviewReview < DomainModel
   end
 
   def content_model
-    self.user_review_type.content_model
+    self.user_review_type.content_model if self.user_review_type
   end
 
   def model_data=(val)

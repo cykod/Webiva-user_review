@@ -109,6 +109,12 @@ class UserReview::PageFeature < ParagraphFeature
 
     c.h_tag('review:submitted_by') { |t| t.locals.review.end_user.username if t.locals.review.end_user }
 
+    c.h_tag('review:subject') { |t| t.locals.review.container_node.title if t.locals.review.container_node}
+
+    c.link_tag('review:detail') do |t| 
+      t.locals.review.content_node.link
+    end
+
     c.expansion_tag('review:publication') { |t| t.locals.entry = t.locals.review.model }
 
     if data[:options].user_review_type && cm = data[:options].user_review_type.content_model
