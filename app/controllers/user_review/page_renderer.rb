@@ -61,11 +61,11 @@ class UserReview::PageRenderer < ParagraphRenderer
    
     @review = UserReviewReview.new({ :end_user_id => myself.id, 
                                      :user_review_type_id => @options.user_review_type_id,
-                                     :container_node_id => node.id })
+                                     :container_node_id => node ? node.id : nil })
     require_js('prototype')
 
     if request.post? && params[:review]
-      if @review.update_attributes(params[:review].slice(:title,:review_body,:rating,:model_data))
+      if @review.update_attributes(params[:review].slice(:title,:review_body,:rating,:model_data,:container_node_id))
         if !myself.id
         # if we're not logged in, redirect to user login page, set session and review
           session[:user_review_submitted] = @review.id

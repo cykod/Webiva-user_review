@@ -57,6 +57,12 @@ class UserReview::PageFeature < ParagraphFeature
   def user_review_page_submit_feature(data)
     webiva_custom_feature(:user_review_page_submit,data) do |c|
       c.form_for_tag('review','review') { |t| data[:review] }
+      c.field_tag('review:container_node_id', :control => 'select') do |t| 
+         [['--Select--',nil ]] + ContentNode.find(:all,
+                          :conditions => { 
+                              :content_type_id => data[:options].content_type_id 
+                            },:include => :node).map { |n| [ n.title, n.id ] }.sort { |a,b| a[0] <=> b[0] } 
+      end
       c.field_tag('review:rating', :control => 'rating_field')
       c.field_tag('review:title')
       c.field_tag('review:review_body',:control => 'text_area')
