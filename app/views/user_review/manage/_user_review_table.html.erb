@@ -9,5 +9,6 @@
       <td valign='baseline' align='center'><img src='<%= theme_src(t.rating_icon) %>'/></td>
       <td><%= t.end_user ? link_to(h(t.end_user.email), :controller => '/members',:action => 'view', :path => [ t.end_user_id ]) : "(No User)" %></td>
       <td><%= t.rating %></td>
+      <td><%= t.created_at.to_s(:short) %>
     <% end -%>
 <% end -%>

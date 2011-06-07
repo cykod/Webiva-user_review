@@ -18,7 +18,8 @@ class UserReview::ManageController < ModuleController
                   hdr(:options,:container_node_id, :label => "Item", :options => :content_nodes, :display => 'select', :noun => 'Item'), 
                   hdr(:options,:approval,:options =>  [ ['Unrated',0],['Negative',-1],['Positive',1]],  :icon => 'icons/table_actions/rating_none.gif', :width => '32' ),
                   "User",
-                  hdr(:options,:rating, :options => (1..5).to_a.map { |n| [ "#{n}", n ] })
+                  hdr(:options,:rating, :options => (1..5).to_a.map { |n| [ "#{n}", n ] }),
+                  :created_at
                 ]
 
     protected

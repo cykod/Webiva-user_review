@@ -1,6 +1,7 @@
 <div class='admin_content'>
   <% admin_form_for :user_review, @review do |f| %>
     <%= f.text_field :title,:size => 80 %>
+    <%= f.datetime_field :created_at %>
     <%= f.radio_buttons :approval, UserReviewReview.approval_select_options %>
     <%= f.text_field :permalink, :size => 80 %>
     <%= f.text_area :review_body, :rows => 12, :cols => 80 %>
