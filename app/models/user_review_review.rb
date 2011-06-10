@@ -2,7 +2,7 @@
 
 class UserReviewReview < DomainModel
 
-  validates_presence_of :title, :review_body
+  validates_presence_of :title, :review_body, :rating
 
 
   belongs_to :end_user
