@@ -2,8 +2,7 @@
 
 class UserReviewReview < DomainModel
 
-  validates_presence_of :title, :review_body, :rating, :container_node_id
-
+  validates_presence_of :title, :review_body, :rating
 
   belongs_to :end_user
   belongs_to :user_review_type
@@ -24,6 +23,7 @@ class UserReviewReview < DomainModel
   named_scope :approved, { :conditions => [ 'approval > 0' ] }
 
   def validate
+    self.errors.add_to_base('Please select a product') if !self.container_node
     if @content_model_entry
       self.errors.add_to_base('Review Details Error') if !@content_model_entry.valid?  
     end
