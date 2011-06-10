@@ -2,7 +2,7 @@
 
 class UserReviewReview < DomainModel
 
-  validates_presence_of :title, :review_body, :rating
+  validates_presence_of :title, :review_body, :rating, :container_node_id
 
 
   belongs_to :end_user
@@ -25,7 +25,7 @@ class UserReviewReview < DomainModel
 
   def validate
     if @content_model_entry
-      self.errors.add_to_base('Model error') if !@content_model_entry.valid?  
+      self.errors.add_to_base('Review Details Error') if !@content_model_entry.valid?  
     end
   end
 
