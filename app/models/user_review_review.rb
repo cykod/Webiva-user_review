@@ -2,7 +2,7 @@
 
 class UserReviewReview < DomainModel
 
-  validates_presence_of :title, :review_body, :rating
+  validates_presence_of :title, :review_body
 
   belongs_to :end_user
   belongs_to :user_review_type
@@ -24,6 +24,7 @@ class UserReviewReview < DomainModel
 
   def validate
     self.errors.add_to_base('Please select a product') if !self.container_node
+    self.errors.add_to_base("Overall rating can't be blank") if self.rating.blank?
     if @content_model_entry
       self.errors.add_to_base('Review Details Error') if !@content_model_entry.valid?  
     end

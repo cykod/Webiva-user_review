@@ -26,6 +26,11 @@ class UserReview::PageRenderer < ParagraphRenderer
       @pages,@reviews = scope.approved.paginate(params[:page], :order => 'created_at DESC', :per_page => @options.per_page)
     end
 
+    if conn_id.present?
+      @content_node = ContentNode.find_by_id(conn_id)
+      set_title(@content_node.node.title,'review') if @content_node
+    end
+
   
     render_paragraph :feature => :user_review_page_list
   end
@@ -103,7 +108,8 @@ class UserReview::PageRenderer < ParagraphRenderer
       raise SiteNodeEngine::MissingPageException.new( site_node, language ) if !@review && conn_id.present?
 
       if @review && @review.container_node
-        set_title(@review.container_node.title.to_s + " - " + @review.title.to_s)
+        set_title(h(@review.container_node.title.to_s + " - " + @review.title.to_s))
+        set_title(h(@review.container_node.title.to_s + " - " + @review.title.to_s),'review')
       end
     else
       @review = UserReviewReview.first
