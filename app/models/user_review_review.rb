@@ -2,7 +2,8 @@
 
 class UserReviewReview < DomainModel
 
-  validates_presence_of :title, :review_body
+  validates_presence_of :title
+  validates_length_of :review_body, :minimum => 50, :message => 'must be at least 50 characters long'
 
   belongs_to :end_user
   belongs_to :user_review_type
