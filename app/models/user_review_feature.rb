@@ -15,7 +15,14 @@ class UserReviewFeature
 
     c.value_tag('entry:reviews:num') { |t| t.locals.review.num_ratings }
     c.value_tag('entry:reviews:stars') {  |t| t.locals.review.rating_stars}
-    c.value_tag('entry:reviews:rating') { |t| t.locals.review.rating }
+
+    c.value_tag('entry:reviews:rating') do |t| 
+      if t.attr['multiplier'] 
+        (t.locals.review.rating * (t.attr['multiplier'] || 1).to_i).floor.to_i 
+      else
+        sprintf("%0.1f",t.locals.review.rating)
+      end
+    end
   end
 
     def self.site_feature_blog_entry_detail_handler_info
