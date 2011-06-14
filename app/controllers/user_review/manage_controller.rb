@@ -25,7 +25,7 @@ class UserReview::ManageController < ModuleController
     protected
 
     def content_nodes
-      UserReviewReview.content_node_select_options
+      UserReviewReview.content_node_select_options.sort { |a,b| a[0].to_s.downcase <=> b[0].to_s.downcase }
     end
 
 

@@ -47,7 +47,7 @@ class UserReviewReview < DomainModel
     reviews = UserReviewReview.find(:all,:select => 'container_node_id',:group => 'container_node_id')
 
 
-    ContentNodeValue.select_options(:conditions => { :content_node_id => reviews.map(&:container_node_id) })
+    ContentNodeValue.all(:select => "title,content_node_id", :conditions => { :content_node_id => reviews.map(&:container_node_id) }).map { |c| [ c.name, c.content_node_id ]  }
   end
 
  def model
