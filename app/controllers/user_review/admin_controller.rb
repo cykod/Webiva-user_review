@@ -19,6 +19,8 @@ class UserReview::AdminController < ModuleController
 
   content_model :user_review_review
 
+  register_handler :site_feature, :blog_entry_list, "UserReviewFeature"
+  register_handler :site_feature, :blog_entry_detail, "UserReviewFeature"
 
   public 
 

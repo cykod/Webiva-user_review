@@ -6,6 +6,8 @@ class UserReviewResult < DomainModel
 
   belongs_to :container_node, :class_name => 'ContentNode'
 
+  named_scope(:by_container_node_id, Proc.new { |nid| { :conditions => { :container_node_id => nid } } })
+
 
   def self.push_review(review)
     result = UserReviewResult.find_by_container_node_id_and_user_review_type_id(review.container_node_id,
